@@ -1,4 +1,5 @@
 // Components
+import AdminNotificationList from "./components/AdminNotificationList";
 import RecentActivitiesList from "./components/RecentActivitiesList";
 import StatCards from "./components/StatCards";
 
@@ -29,7 +30,9 @@ export default function DashboardPage() {
         </div>
 
         {/* System Notifications */}
-        <div className="border h-112 rounded-lg overflow-auto"></div>
+        <div className="border pr-2 h-112 rounded-lg overflow-auto">
+          <AdminNotificationList />
+        </div>
       </div>
     </div>
   );
