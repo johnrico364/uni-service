@@ -30,7 +30,7 @@ export default function DashboardPage() {
         </div>
 
         {/* System Notifications */}
-        <div className="border pr-2 h-112 rounded-lg overflow-auto">
+        <div className="pr-2 h-112 rounded-lg overflow-auto">
           <AdminNotificationList />
         </div>
       </div>
