@@ -1,5 +1,6 @@
 // Components
 import AdminNotificationList from "./components/AdminNotificationList";
+import ThisWeekLineChart from "./components/ThisWeekLineChart";
 import RecentActivitiesList from "./components/RecentActivitiesList";
 import StatCards from "./components/StatCards";
 
@@ -25,14 +26,18 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-2 gap-3 mt-7">
         {/* Recent Activities Log */}
-        <div className="pr-2 h-112 rounded-lg overflow-auto">
+        <div className="pr-2 h-112 rounded-lg overflow-auto shadow-lg">
           <RecentActivitiesList />
         </div>
 
         {/* System Notifications */}
-        <div className="pr-2 h-112 rounded-lg overflow-auto">
+        <div className="pr-2 h-112 rounded-lg overflow-auto shadow-lg">
           <AdminNotificationList />
         </div>
+      </div>
+
+      <div className="mt-7 h-128 bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+        <ThisWeekLineChart />
       </div>
     </div>
   );
