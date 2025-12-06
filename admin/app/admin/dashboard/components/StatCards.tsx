@@ -9,7 +9,7 @@ export default function StatCards() {
   return (
     <div className="stats mt-2 w-full overflow-x-auto">
       <div className="stat w-[14.2rem]">
-        <div className="stat-figure text-secondary">
+        <div className="stat-figure text-primary">
           <HiUsers className="text-[2.5rem]" />
         </div>
         <div className="stat-title">Users</div>
@@ -18,7 +18,7 @@ export default function StatCards() {
       </div>
 
       <div className="stat w-[14.2rem]">
-        <div className="stat-figure text-secondary">
+        <div className="stat-figure text-primary">
           <RiStoreLine className="text-[2.5rem]" />
         </div>
         <div className="stat-title">Service Providers</div>
@@ -27,7 +27,7 @@ export default function StatCards() {
       </div>
 
       <div className="stat w-[14.2rem]">
-        <div className="stat-figure text-secondary">
+        <div className="stat-figure text-primary">
           <MdOutlineDesignServices className="text-[2.5rem]" />
         </div>
         <div className="stat-title">Services</div>
@@ -36,7 +36,7 @@ export default function StatCards() {
       </div>
 
       <div className="stat w-[14.2rem]">
-        <div className="stat-figure text-secondary">
+        <div className="stat-figure text-primary">
           <LuCalendarCheck2 className="text-[2.5rem]" />
         </div>
         <div className="stat-title">Appointments</div>
@@ -45,7 +45,7 @@ export default function StatCards() {
       </div>
 
       <div className="stat w-[14.2rem]">
-        <div className="stat-figure text-secondary">
+        <div className="stat-figure text-primary">
           <GiDeliveryDrone className="text-[2.5rem]" />
         </div>
         <div className="stat-title">Drones</div>
