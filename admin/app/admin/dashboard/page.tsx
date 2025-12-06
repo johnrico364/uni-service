@@ -3,6 +3,7 @@ import AdminNotificationList from "./components/AdminNotificationList";
 import ThisWeekLineChart from "./components/ThisWeekLineChart";
 import RecentActivitiesList from "./components/RecentActivitiesList";
 import StatCards from "./components/StatCards";
+import ThisMonthLineChart from "./components/ThisMonthLineChart";
 
 export default function DashboardPage() {
   return (
@@ -36,8 +37,18 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="mt-7 h-128 bg-base-100 border border-base-300 rounded-lg overflow-hidden">
+      {/* This week line chart */}
+      <div className="mt-7 h-128 bg-base-100 border-2 border-base-300 rounded-lg overflow-hidden">
         <ThisWeekLineChart />
+      </div>
+      {/* Past 7 weeks line chart */}
+      <div className="mt-7 h-128 bg-base-100 border-2 border-base-300 rounded-lg overflow-hidden">
+        <ThisMonthLineChart />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mt-7">
+        <div className="border-2 border-base-300 h-112 rounded-lg overflow-auto"></div>
+        <div className="border-2 border-base-300 h-112 rounded-lg overflow-auto"></div>
       </div>
     </div>
   );
