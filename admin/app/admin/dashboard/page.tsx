@@ -5,6 +5,7 @@ import RecentActivitiesList from "./components/RecentActivitiesList";
 import StatCards from "./components/StatCards";
 import PastMonthsLineChart from "./components/PastMonthsLineChart";
 import TopServiceBarChart from "./components/TopServiceBarChart";
+import SuccessRatePieChart from "./components/SuccessRatePieChart";
 
 export default function DashboardPage() {
   return (
@@ -51,7 +52,9 @@ export default function DashboardPage() {
         <div className="border-2 border-base-300 h-112 rounded-lg overflow-auto">
           <TopServiceBarChart />
         </div>
-        <div className="border-2 border-base-300 h-112 rounded-lg overflow-auto"></div>
+        <div className="border-2 border-base-300 h-112 rounded-lg overflow-auto">
+          <SuccessRatePieChart/>
+        </div>
       </div>
     </div>
   );

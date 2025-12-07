@@ -61,16 +61,7 @@ export default function TopServiceBarChart() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
-        position: "top" as const,
-        labels: {
-          usePointStyle: true,
-          padding: 15,
-          font: {
-            size: 14,
-            weight: 500,
-          },
-        },
+        display: false,
       },
       title: {
         display: true,
