@@ -182,6 +182,7 @@ export default function UsersPage() {
               <option>All</option>
               <option>Customer</option>
               <option>Service Provider</option>
+              <option>Admin</option>
             </select>
           </div>
 

@@ -139,6 +139,11 @@ export default function ProvidersPage() {
     }
   };
 
+  const categories = [
+    "All",
+    ...new Set(mockProviders.map((provider) => provider.service_category)),
+  ];
+
   return (
     <div className="overflow-auto text-[13px] pb-5">
       {/* Header */}
@@ -178,17 +183,11 @@ export default function ProvidersPage() {
               value={serviceFilter}
               onChange={(e) => setServiceFilter(e.target.value)}
             >
-              <option>All</option>
-              <option>Home Services</option>
-              <option>Health & Wellness</option>
-              <option>Beauty & Personal Care</option>
-              <option>Automotive Services</option>
-              <option>Professional & Freelance Services</option>
-              <option>Education & Tutoring</option>
-              <option>Events & Entertainment</option>
-              <option>Maintenance & Technical Services</option>
-              <option>Pet Care</option>
-              <option>Delivery & Logistics</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
 
