@@ -217,7 +217,7 @@ export default function UsersPage() {
                 <th className="font-bold">Role</th>
                 <th className="font-bold">Status</th>
                 <th className="font-bold">Join Date</th>
-                <th className="font-bold">Actions</th>
+                <th className="font-bold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -239,9 +239,6 @@ export default function UsersPage() {
                       <div className="flex gap-2">
                         <button className="btn btn-xs text-[13px] btn-info">
                           View
-                        </button>
-                        <button className="btn btn-xs text-[13px] btn-warning">
-                          Edit
                         </button>
                       </div>
                     </td>

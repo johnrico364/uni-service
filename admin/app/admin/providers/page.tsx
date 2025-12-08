@@ -223,7 +223,7 @@ export default function ProvidersPage() {
                 <th className="font-bold">Description</th>
                 <th className="font-bold">Verification Status</th>
                 <th className="font-bold">Created Date</th>
-                <th className="font-bold">Actions</th>
+                <th className="font-bold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -249,9 +249,6 @@ export default function ProvidersPage() {
                       <div className="flex gap-2">
                         <button className="btn btn-xs btn-info text-[13px]">
                           View
-                        </button>
-                        <button className="btn btn-xs btn-warning text-[13px]">
-                          Edit
                         </button>
                       </div>
                     </td>
