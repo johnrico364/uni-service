@@ -10,7 +10,7 @@ import {
   LuChartColumnBig,
   LuHandHelping,
 } from "react-icons/lu";
-import { FaRegBell, FaStore } from "react-icons/fa";
+import { FaBox, FaRegBell, FaStore } from "react-icons/fa";
 import { BsCartCheck } from "react-icons/bs";
 import { TbDrone, TbReportAnalytics } from "react-icons/tb";
 import { GiReceiveMoney } from "react-icons/gi";
@@ -44,9 +44,14 @@ const routes = [
     icon: <LuCalendarCheck2 className="text-[1.35rem]" />,
   },
   {
+    name: "Products",
+    href: "/admin/products",
+    icon: <BsCartCheck className="text-[1.35rem]" />,
+  },
+  {
     name: "Orders",
     href: "/admin/orders",
-    icon: <BsCartCheck className="text-[1.35rem]" />,
+    icon: <FaBox className="text-[1.35rem]" />,
   },
   {
     name: "Drones",
