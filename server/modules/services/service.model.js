@@ -9,6 +9,8 @@ const serviceSchema = new mongoose.Schema(
     duration_minutes: { type: Number, required: true },
     category: { type: String, required: true },
     images: { type: String, required: true },
+    availability_start: { type: String, required: true },
+    availability_end: { type: String, required: true },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
   },
   {
