@@ -3,8 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 // Import routes
-
-
+import user from "./modules/users/user.route.js";
 
 dotenv.config();
 const app = express();
@@ -17,7 +16,7 @@ mongoose.connect(_dbURI).then(() => {
 });
 
 // Routes
-
+app.use("/api/users", user);
 
 // Local Server
 app.listen(process.env.PORT, () =>
