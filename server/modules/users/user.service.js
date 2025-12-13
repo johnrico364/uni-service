@@ -1,9 +1,17 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import User from "./user.model.js"; // Import User Model
 
 export const UserService = {
+  // CREATE TOKEN ==================================================================
+  async createToken(userData) {
+    return jwt.sign({ userData }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES,
+    });
+  },
+
   // CREATE USER =================================================================
   async createUser(data) {
     // Validations
@@ -29,6 +37,7 @@ export const UserService = {
     const createUser = await User.create({ ...data, password: hashPassword });
     return createUser;
   },
+
   // LOGIN USER ==================================================================
   async loginUser(data) {
     // Validations
