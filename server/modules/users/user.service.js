@@ -6,8 +6,8 @@ import User from "./user.model.js"; // Import User Model
 
 export const UserService = {
   // CREATE TOKEN ==================================================================
-  async createToken(userData) {
-    return jwt.sign({ userData }, process.env.JWT_SECRET, {
+  async createToken(user_id) {
+    return jwt.sign({ user_id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES,
     });
   },
@@ -53,4 +53,18 @@ export const UserService = {
 
     return user;
   },
+
+  // GET ALL USERS ================================================================
+  async getAllUsers() {
+    const users = await User.find({role: {$in: ['user', 'service_provider']}});
+    return users;
+  },
+
+  // GET USER BY ID ================================================================
+  async getUserById(user_id) {
+    const user = await User.findById(user_id);
+    return user;
+  }
+
+  
 };
