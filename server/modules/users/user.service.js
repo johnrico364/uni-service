@@ -2,6 +2,7 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import path from "path";
 
 import User from "./user.model.js"; // Import User Model
 
@@ -15,8 +16,10 @@ export const UserService = {
 
   // CREATE USER =================================================================
   async createUser(data, userImage) {
-    const img_path = "images/users/" + userImage;
-    console.log(img_path);
+    let img_path;
+    if (userImage) {
+      img_path = path.join("images/users", userImage);
+    }
 
     // Validations
     if (!validator.isEmail(data.email)) {
@@ -40,7 +43,11 @@ export const UserService = {
     const hashPassword = await bcrypt.hash(data.password, salt);
 
     // Create User
-    const createUser = await User.create({ ...data, password: hashPassword });
+    const createUser = await User.create({
+      ...data,
+      password: hashPassword,
+      profile_image: userImage,
+    });
     return createUser;
   },
 
