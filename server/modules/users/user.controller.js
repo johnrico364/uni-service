@@ -1,9 +1,10 @@
 import { UserService } from "./user.service.js";
+import path from "path";
 
 export const createUser = async (req, res) => {
   let userData = JSON.parse(req.body.data);
   const userImg = req.file?.filename;
-  
+
   try {
     const user = await UserService.createUser(userData, userImg);
     res.status(201).json({ success: true, data: user });
@@ -43,8 +44,10 @@ export const getUserById = async (req, res) => {
 };
 
 export const updateUserById = async (req, res) => {
-  const id = req.params.id;
-  const newUser = JSON.parse(req.body.data);
-  const productImg = req.file?.filename;
-  const oldImg = JSON.parse(req.body.oldPic);
+  try {
+    const updatedUser = await UserService.updateUserById(req);
+    res.status(200).json({ success: true, data: updatedUser });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
 };

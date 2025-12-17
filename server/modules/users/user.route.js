@@ -16,6 +16,6 @@ router.post("/signin", signinUser);
 
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
-router.patch("/:id", updateUserById);
+router.patch("/:id", upload.single("image"), updateUserById);
 
 export default router;

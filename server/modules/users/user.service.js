@@ -82,5 +82,29 @@ export const UserService = {
   },
 
   // UPDATE USER BY ID ==============================================================
-  async updateUserById(user_id, data) {},
+  async updateUserById(req) {
+    const id = req.params.id;
+    const newUser = JSON.parse(req.body.data);
+    const userImg = req.file?.filename;
+    const oldImg = req.body?.oldImg;
+    const oldImagePath = path.join("images/users", oldImg);
+
+    if (userImg) {
+      fs.unlink(oldImagePath, (err) => {
+        if (err) throw err;
+        console.log("deleted successfully")
+      });
+    }
+
+    const response = await User.findByIdAndUpdate(
+      id,
+      {
+        ...newUser,
+        profile_image: userImg ? userImg : oldImg,
+      },
+      { new: true }
+    );
+
+    return response;
+  },
 };
