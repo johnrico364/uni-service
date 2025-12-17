@@ -23,11 +23,17 @@ export const UserService = {
 
     // Validations
     if (!validator.isEmail(data.email)) {
-      fs.unlink(img_path, (err) => console.log(err));
+      fs.unlink(img_path, (err) => {
+        if (err) throw err;
+        console.log("deleted successfully");
+      });
       throw Error("Invalid Email Format");
     }
     if (!validator.isStrongPassword(data.password)) {
-      fs.unlink(img_path, (err) => console.log(err));
+      fs.unlink(img_path, (err) => {
+        if (err) throw err;
+        console.log("deleted successfully");
+      });
       throw Error(
         "Password must contains one capital letter and one special character"
       );
@@ -92,7 +98,7 @@ export const UserService = {
     if (userImg) {
       fs.unlink(oldImagePath, (err) => {
         if (err) throw err;
-        console.log("deleted successfully")
+        console.log("deleted successfully");
       });
     }
 
