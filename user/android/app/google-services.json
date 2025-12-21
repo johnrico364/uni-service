@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "146446211964",
+    "project_id": "uniservice-e924d",
+    "storage_bucket": "uniservice-e924d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146446211964:android:308113c12121dbc47d62f9",
+        "android_client_info": {
+          "package_name": "com.example.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146446211964-gfjdrrn041thu9q9obd732t3plp0a7ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZGFvZna_QIsLrccI6LxYMGXXDP03fsDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146446211964-gfjdrrn041thu9q9obd732t3plp0a7ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
