@@ -25,4 +25,13 @@ export const ProviderService = {
     const providers = await Provider.find();
     return providers;
   },
+  // GET SERVICE PROVIDER BY ID ==========================================================
+  async getProviderById(id) {
+    const provider = await Provider.findById(id);
+    if (!provider) {
+      throw new Error("Service Provider not found.");
+    }
+    
+    return provider;
+  }
 };

@@ -17,3 +17,13 @@ export const getAllProviders = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getProviderById = async (req, res) => {
+  const providerId = req.params.id;
+  try {
+    const provider = await ProviderService.getProviderById(providerId);
+    res.status(200).json({ success: true, data: provider });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
