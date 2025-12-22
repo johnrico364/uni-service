@@ -8,3 +8,12 @@ export const registerProvider = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getAllProviders = async (req, res) => {
+  try {
+    const providers = await ProviderService.getAllProviders();
+    res.status(200).json({ success: true, data: providers });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

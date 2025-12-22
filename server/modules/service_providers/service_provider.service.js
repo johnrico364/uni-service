@@ -20,4 +20,9 @@ export const ProviderService = {
 
     return response;
   },
+  // GET ALL SERVICE PROVIDERS ==========================================================
+  async getAllProviders() {
+    const providers = await Provider.find();
+    return providers;
+  },
 };
