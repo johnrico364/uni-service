@@ -31,7 +31,7 @@ export const ProviderService = {
     if (!provider) {
       throw new Error("Service Provider not found.");
     }
-    
+
     return provider;
   },
   // UPDATE SERVICE PROVIDER ==========================================================
@@ -42,5 +42,15 @@ export const ProviderService = {
     }
 
     return provider;
-  }
+  },
+  // VERIFY SERVICE PROVIDER ===========================================================
+  async verifyProvider(id) {
+    const provider = await Provider.findByIdAndUpdate(
+      id,
+      { verification_status: "approved" },
+      { new: true }
+    );
+
+    return provider;
+  },
 };

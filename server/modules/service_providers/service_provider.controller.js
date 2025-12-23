@@ -38,3 +38,13 @@ export const updateProvider = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const verifyProvider = async (req, res) => {
+  const providerId = req.params.id;
+  try {
+    const provider = await ProviderService.verifyProvider(providerId);
+    res.status(200).json({ success: true, data: provider });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
