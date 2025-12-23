@@ -53,4 +53,17 @@ export const ProviderService = {
 
     return provider;
   },
+  // DELETE SERVICE PROVIDER ===========================================================
+  async deleteProvider(id) {
+    const provider = await Provider.findByIdAndUpdate(
+      id,
+      {
+        is_deleted: true,
+        deleted_at: new Date(),
+      },
+      { new: true }
+    );
+
+    return provider;
+  },
 };

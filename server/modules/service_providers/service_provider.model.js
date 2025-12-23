@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const serviceProviderSchema = new mongoose.Schema(
   {
@@ -9,7 +9,7 @@ const serviceProviderSchema = new mongoose.Schema(
       required: true,
       enum: [
         "Home Services",
-        'Health & Wellness',
+        "Health & Wellness",
         "Beauty & Personal Care",
         "Automotive Services",
         "Professional & Freelance Services",
@@ -25,6 +25,9 @@ const serviceProviderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "approved", "rejected"],
     },
+
+    is_deleted: { type: Boolean, default: false },
+    deleted_at: { type: Date, default: null },
   },
   {
     timestamps: true,
