@@ -33,5 +33,14 @@ export const ProviderService = {
     }
     
     return provider;
+  },
+  // UPDATE SERVICE PROVIDER ==========================================================
+  async updateProvider(id, data) {
+    const provider = await Provider.findByIdAndUpdate(id, data, { new: true });
+    if (!provider) {
+      throw new Error("Service Provider not found.");
+    }
+
+    return provider;
   }
 };

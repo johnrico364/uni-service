@@ -27,3 +27,14 @@ export const getProviderById = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const updateProvider = async (req, res) => {
+  const providerId = req.params.id;
+  const newData = req.body;
+  try {
+    const provider = await ProviderService.updateProvider(providerId, newData);
+    res.status(200).json({ success: true, data: provider });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
