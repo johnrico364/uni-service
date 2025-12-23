@@ -12,6 +12,17 @@
 .swiftpm/
 migrate_working_dir/
 
+# Firebase
+firebase-debug.log
+
+# Environment files
+.env
+
+# Android signing keys (VERY IMPORTANT)
+android/key.properties
+android/*.jks
+android/*.keystore
+
 # IntelliJ related
 *.iml
 *.ipr
