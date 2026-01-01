@@ -11,10 +11,10 @@ import {
 
 const router = express.Router();
 
-router.post("/register", registerProvider);
+router.post("/register", upload.single("image"), registerProvider);
 router.get("/", getAllProviders);
 router.get("/:id", getProviderById);
-router.patch("/:id", updateProvider);
+router.patch("/:id", upload.single("image"), updateProvider);
 router.patch("/:id/verify", verifyProvider); //admin
 router.patch("/:id/delete", deleteProvider);
 
