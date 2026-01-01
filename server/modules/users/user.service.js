@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
 
-import User from "./user.model.js"; // Import User Model
+import User from "./user.model.js"; // Model
 
 export const UserService = {
   // CREATE TOKEN ==================================================================
@@ -25,14 +25,14 @@ export const UserService = {
     if (!validator.isEmail(data.email)) {
       fs.unlink(img_path, (err) => {
         if (err) throw err;
-        console.log("deleted successfully");
+        console.log("user img delete");
       });
       throw Error("Invalid Email Format");
     }
     if (!validator.isStrongPassword(data.password)) {
       fs.unlink(img_path, (err) => {
         if (err) throw err;
-        console.log("deleted successfully");
+        console.log("user img delete");
       });
       throw Error(
         "Password must contains one capital letter and one special character"
@@ -93,12 +93,12 @@ export const UserService = {
     const newUser = JSON.parse(req.body.data);
     const userImg = req.file?.filename;
     const oldImg = req.body?.oldImg;
-    const oldImagePath = path.join("images/users", oldImg);
 
     if (userImg) {
+      const oldImagePath = path.join("images/users", oldImg);
       fs.unlink(oldImagePath, (err) => {
         if (err) throw err;
-        console.log("deleted successfully");
+        console.log("old img delete");
       });
     }
 
