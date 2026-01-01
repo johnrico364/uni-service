@@ -1,8 +1,7 @@
 import { UserService } from "./user.service.js";
-import path from "path";
 
 export const createUser = async (req, res) => {
-  let userData = JSON.parse(req.body.data);
+  const userData = JSON.parse(req.body.data);
   const userImg = req.file?.filename;
 
   try {
