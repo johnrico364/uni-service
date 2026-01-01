@@ -20,7 +20,10 @@ const serviceProviderSchema = new mongoose.Schema(
         "Delivery & Logistics",
       ],
     },
+    profile_image: { type: String, default: null },
+    address: { type: String, required: true },
     description: { type: String, required: true },
+    
     verification_status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

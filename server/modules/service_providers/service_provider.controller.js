@@ -1,8 +1,14 @@
 import { ProviderService } from "./service_provider.service.js";
 
 export const registerProvider = async (req, res) => {
+  const providerData = JSON.parse(req.body.data);
+  const providerImg = req.file?.filename;
+
   try {
-    const provider = await ProviderService.registerProvider(req.body);
+    const provider = await ProviderService.registerProvider(
+      providerData,
+      providerImg
+    );
     res.status(201).json({ success: true, data: provider });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -29,10 +35,8 @@ export const getProviderById = async (req, res) => {
 };
 
 export const updateProvider = async (req, res) => {
-  const providerId = req.params.id;
-  const newData = req.body;
   try {
-    const provider = await ProviderService.updateProvider(providerId, newData);
+    const provider = await ProviderService.updateProvider(req);
     res.status(200).json({ success: true, data: provider });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
