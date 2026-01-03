@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
 
-import User from "./user.model.js"; // Import User Model
+import User from "./user.model.js"; // Model
 
 export const UserService = {
   // CREATE TOKEN ==================================================================
@@ -23,17 +23,21 @@ export const UserService = {
 
     // Validations
     if (!validator.isEmail(data.email)) {
-      fs.unlink(img_path, (err) => {
-        if (err) throw err;
-        console.log("deleted successfully");
-      });
+      if (img_path) {
+        fs.unlink(img_path, (err) => {
+          if (err) throw err;
+          console.log("user img delete");
+        });
+      }
       throw Error("Invalid Email Format");
     }
     if (!validator.isStrongPassword(data.password)) {
-      fs.unlink(img_path, (err) => {
-        if (err) throw err;
-        console.log("deleted successfully");
-      });
+      if (img_path) {
+        fs.unlink(img_path, (err) => {
+          if (err) throw err;
+          console.log("user img delete");
+        });
+      }
       throw Error(
         "Password must contains one capital letter and one special character"
       );
@@ -41,7 +45,9 @@ export const UserService = {
 
     const checkEmail = await User.findOne({ email: data.email });
     if (checkEmail) {
-      throw Error("Email already exists");
+      const error = new Error("Email already exists");
+      error.statusCode = 400;
+      throw error;
     }
 
     // Hash and Salt Password
@@ -62,12 +68,16 @@ export const UserService = {
     // Validations
     const user = await User.findOne({ email: data.email });
     if (!user) {
-      throw Error("Email not found");
+      const error = new Error("Email not found");
+      error.statusCode = 400;
+      throw error;
     }
 
     const isMatch = await bcrypt.compare(data.password, user.password);
     if (!isMatch) {
-      throw Error("Invalid password");
+      const error = new Error("Invalid password");
+      error.statusCode = 400;
+      throw error;
     }
 
     return user;
@@ -93,12 +103,12 @@ export const UserService = {
     const newUser = JSON.parse(req.body.data);
     const userImg = req.file?.filename;
     const oldImg = req.body?.oldImg;
-    const oldImagePath = path.join("images/users", oldImg);
 
     if (userImg) {
+      const oldImagePath = path.join("images/users", oldImg);
       fs.unlink(oldImagePath, (err) => {
         if (err) throw err;
-        console.log("deleted successfully");
+        console.log("old img delete");
       });
     }
 
@@ -119,7 +129,7 @@ export const UserService = {
     const response = await User.findByIdAndUpdate(
       user_id,
       { status },
-      {new: true, runValidators: true }
+      { new: true, runValidators: true }
     );
     return response;
   },
