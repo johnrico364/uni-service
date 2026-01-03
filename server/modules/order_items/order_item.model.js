@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema({
   order_id: { type: String, required: true, ref: "Order" },
@@ -8,4 +8,4 @@ const orderItemSchema = new mongoose.Schema({
   subtotal: { type: mongoose.Decimal128, required: true },
 });
 
-module.exports = mongoose.model("OrderItem", orderItemSchema);
+export default mongoose.model("OrderItem", orderItemSchema);
