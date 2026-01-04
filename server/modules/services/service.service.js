@@ -21,4 +21,9 @@ export const serviceService = {
 
     return createService;
   },
+  // GETT ALL SERVICES =============================================================
+  async getServices() {
+    const services = await Service.find().sort({ createdAt: -1 });
+    return services;
+  },
 };
