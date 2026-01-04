@@ -4,6 +4,6 @@ import { registerService } from "./service.controller.js";
 
 const router = express.Router();
 
-router.post("/register", upload.single("image"), registerService);
+router.post("/", upload.array("images", 6), registerService);
 
 export default router;
