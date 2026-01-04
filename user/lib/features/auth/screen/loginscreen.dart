@@ -1,110 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../bloc/bloc_bloc.dart';
 import '../auth_service.dart';
 import 'registerscreen.dart';
-import '../../landing/landingpage.dart';
+import '../../pages/service/screen/service_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-	const LoginScreen({super.key});
+  const LoginScreen({super.key});
 
-	@override
-	State<LoginScreen> createState() => _LoginScreenState();
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-	final _emailController = TextEditingController();
-	final _passwordController = TextEditingController();
-	final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-	@override
-	Widget build(BuildContext context) {
-		return BlocProvider(
-			create: (_) => BlocBloc(authService: AuthService()),
-			child: Scaffold(
-				appBar: AppBar(title: const Text('Login')),
-				body: BlocListener<BlocBloc, BlocState>(
-					listener: (context, state) {
-						if (state is AuthLoading) {
-							showDialog(
-								context: context,
-								barrierDismissible: false,
-								builder: (_) => const Center(child: CircularProgressIndicator()),
-							);
-						} else {
-							// close any loading dialog
-							if (Navigator.canPop(context)) Navigator.popUntil(context, (route) => route.isFirst || route.settings.name != null);
-						}
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
-						if (state is AuthAuthenticated) {
-							ScaffoldMessenger.of(context).showSnackBar(
-									const SnackBar(content: Text('Login successful')));
-							Navigator.of(context).pushAndRemoveUntil(
-								MaterialPageRoute(builder: (_) => const LandingPage()),
-								(route) => false,
-							);
-						}
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => BlocBloc(authService: AuthService()),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Login')),
+        body: BlocListener<BlocBloc, BlocState>(
+          listener: (context, state) {
+            if (state is AuthLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => const Center(child: CircularProgressIndicator()),
+              );
+            } else {
+              if (Navigator.canPop(context)) Navigator.pop(context);
+            }
 
-						if (state is AuthError) {
-							ScaffoldMessenger.of(context)
-									.showSnackBar(SnackBar(content: Text(state.message)));
-						}
-					},
-					child: Padding(
-						padding: const EdgeInsets.all(16.0),
-						child: Builder(builder: (innerContext) {
-							return Form(
-							key: _formKey,
-							child: Column(
-								mainAxisAlignment: MainAxisAlignment.center,
-								children: [
-									TextFormField(
-										controller: _emailController,
-										keyboardType: TextInputType.emailAddress,
-										decoration: const InputDecoration(labelText: 'Email'),
-										validator: (v) => (v == null || v.isEmpty) ? 'Enter email' : null,
-									),
-									const SizedBox(height: 12),
-									TextFormField(
-										controller: _passwordController,
-										obscureText: true,
-										decoration: const InputDecoration(labelText: 'Password'),
-										validator: (v) => (v == null || v.length < 6) ? 'Password min 6 chars' : null,
-									),
-									const SizedBox(height: 20),
-									ElevatedButton(
-										onPressed: () {
-											if (_formKey.currentState!.validate()) {
-												BlocProvider.of<BlocBloc>(innerContext).add(LoginRequested(
-															email: _emailController.text.trim(),
-															password: _passwordController.text.trim(),
-														));
-											}
-										},
-										child: const Text('Login'),
-									),
-									const SizedBox(height: 12),
-									TextButton(
-										onPressed: () {
-											Navigator.of(innerContext).push(
-												MaterialPageRoute(
-																	builder: (_) => BlocProvider.value(
-																				value: BlocProvider.of<BlocBloc>(innerContext),
-																				child: const RegisterScreen(),
-																		),
-												),
-											);
-										},
-										child: const Text('Create an account'),
-									),
-								],
-							),
-						);
-						}),
-					),
-				),
-			),
-		);
-	}
+            if (state is AuthAuthenticated) {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const ServiceScreen()),
+                (_) => false,
+              );
+            }
+
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Builder(builder: (context) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      validator: (v) => v == null || v.isEmpty ? 'Enter email' : null,
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(labelText: 'Password'),
+                      validator: (v) => v == null || v.length < 6 ? 'Min 6 characters' : null,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<BlocBloc>().add(
+                                LoginRequested(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                ),
+                              );
+                        }
+                      },
+                      child: const Text('Login'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                        );
+                      },
+                      child: const Text('Create an account'),
+                    ),
+                    const SizedBox(height: 20),
+                    const Divider(),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      onPressed: () => context.read<BlocBloc>().add(LoginWithGoogle()),
+                      icon: const Icon(Icons.account_circle),
+                      label: const Text('Sign in with Google'),
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
-
