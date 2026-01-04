@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const droneDeliverySchema = new mongoose.Schema(
   {
@@ -27,4 +27,4 @@ const droneDeliverySchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("DroneDelivery", droneDeliverySchema);
+export default mongoose.model("DroneDelivery", droneDeliverySchema);

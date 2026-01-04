@@ -16,3 +16,5 @@ final class RegisterRequested extends BlocEvent {
 }
 
 final class LogoutRequested extends BlocEvent {}
+
+final class LoginWithGoogle extends BlocEvent {}
