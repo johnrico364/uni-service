@@ -21,9 +21,14 @@ export const serviceService = {
 
     return createService;
   },
-  // GETT ALL SERVICES =============================================================
+  // GET ALL SERVICES =============================================================
   async getServices() {
     const services = await Service.find().sort({ createdAt: -1 });
     return services;
   },
+  // GET SERVICE BY ID ============================================================
+  async getServiceById(serviceId) {
+    const service = await Service.findById(serviceId);
+    return service;
+  }
 };

@@ -17,3 +17,12 @@ export const getServices = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getServiceById = async (req, res) => {
+  try {
+    const service = await serviceService.getServiceById(req.params.id);
+    res.status(200).json({ success: true, data: service });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
