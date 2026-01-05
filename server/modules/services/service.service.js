@@ -66,5 +66,23 @@ export const serviceService = {
     );
     return newService;
   },
-  // =====
+  // DELETE SERVICE IMAGES ========================================================
+  async deleteServiceImage(id, image) {
+    const img_path = path.join("images/services", image);
+    fs.unlink(img_path, (err) => {
+      if (err) throw err;
+      console.log("Service img deleted");
+    });
+
+    const service = await Service.findByIdAndUpdate(
+      id,
+      {
+        $pull: { images: image },
+      },
+      { new: true }
+    );
+
+    return service;
+  },
+  // ======
 };
