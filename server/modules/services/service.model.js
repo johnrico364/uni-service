@@ -12,6 +12,8 @@ const serviceSchema = new mongoose.Schema(
     availability_start: { type: String, required: true },
     availability_end: { type: String, required: true },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
+    is_deleted: { type: String, required: true, default: true },
+    deleted_at: { type: Date, default: null },
   },
   {
     timestamps: true,
