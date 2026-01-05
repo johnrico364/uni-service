@@ -4,6 +4,7 @@ import {
   registerService,
   getServices,
   getServiceById,
+  updateService,
 } from "./service.controller.js";
 
 const router = express.Router();
@@ -11,7 +12,7 @@ const router = express.Router();
 router.post("/", upload.array("images", 6), registerService);
 router.get("/", getServices);
 router.get("/:id", getServiceById);
-// router.patch("/:id");
+router.patch("/:id", upload.array("images", 6), updateService);
 // router.patch("/:id/status");
 // router.patch("/:id/delete");
 

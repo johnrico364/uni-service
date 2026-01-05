@@ -30,5 +30,41 @@ export const serviceService = {
   async getServiceById(serviceId) {
     const service = await Service.findById(serviceId);
     return service;
-  }
+  },
+  // UPDATE SERVICE ===============================================================
+  async updateService(req) {
+    const serviceData = JSON.parse(req.body.data);
+    const serviceImages = req?.files?.map((file) => file.filename);
+    const serviceId = req?.params.id;
+    const currentService = await Service.findById(serviceId);
+
+    // Validations
+    if (
+      currentService?.images.length + serviceImages?.length > 6 &&
+      serviceImages?.length > 0
+    ) {
+      // Delete the newly uploaded images asynchronously
+      await Promise.all(
+        serviceImages.map((filename) => {
+          const filePath = path.join("./images/services", filename);
+          return fs.promises
+            .unlink(filePath)
+            .catch((err) =>
+              console.error(`Failed to delete ${filename}:`, err)
+            );
+        })
+      );
+
+      throw Error("You can only upload 6 images per service");
+    }
+
+    // Update new service
+    const newService = await Service.findByIdAndUpdate(
+      serviceId,
+      { ...serviceData, images: [...currentService.images, ...serviceImages] },
+      { new: true }
+    );
+    return newService;
+  },
+  // =====
 };
