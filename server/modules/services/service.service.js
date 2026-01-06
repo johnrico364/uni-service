@@ -84,5 +84,15 @@ export const serviceService = {
 
     return service;
   },
-  // ======
+  // UPDATE SERVICE STATUS ========================================================
+  async updateServiceStatus(id) {
+    const service = await Service.findByIdAndUpdate(
+      id,
+      { status: "inactive" },
+      { new: true }
+    );
+
+    return service
+  },
+  // ===========
 };

@@ -49,3 +49,13 @@ export const deleteServiceImage = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const updateServiceStatus = async (req, res) => {
+  const service_id = req.params.id;
+  try {
+    const service = await serviceService.updateServiceStatus(service_id);
+    res.status(200).json({ success: true, data: service });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

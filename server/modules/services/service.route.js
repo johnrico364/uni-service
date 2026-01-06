@@ -6,6 +6,7 @@ import {
   getServiceById,
   updateService,
   deleteServiceImage,
+  updateServiceStatus,
 } from "./service.controller.js";
 
 const router = express.Router();
@@ -15,7 +16,7 @@ router.get("/", getServices);
 router.get("/:id", getServiceById);
 router.patch("/:id", upload.array("images", 6), updateService);
 router.patch("/:id/delete-image", deleteServiceImage);
-// router.patch("/:id/status");
+router.patch("/:id/status", updateServiceStatus);
 // router.patch("/:id/delete");
 
 export default router;
