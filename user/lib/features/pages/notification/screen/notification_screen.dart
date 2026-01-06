@@ -5,18 +5,14 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppBar(title: const Text('Notifications')),
-        const Expanded(
-          child: Center(
-            child: Text(
-              'NOTIFICATION PAGE',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Notifications')),
+      body: const Center(
+        child: Text(
+          'NOTIFICATION PAGE',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-      ],
+      ),
     );
   }
 }

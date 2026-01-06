@@ -5,18 +5,14 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppBar(title: const Text('Products')),
-        const Expanded(
-          child: Center(
-            child: Text(
-              'PRODUCT PAGE',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Products')),
+      body: const Center(
+        child: Text(
+          'PRODUCT PAGE',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-      ],
+      ),
     );
   }
 }
