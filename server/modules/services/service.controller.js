@@ -59,3 +59,13 @@ export const updateServiceStatus = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const deleteService = async (req, res) => {
+  const service_id = req.params.id;
+  try {
+    const service = await serviceService.deleteService(service_id);
+    res.status(200).json({ success: true, data: service });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

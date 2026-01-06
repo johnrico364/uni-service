@@ -92,7 +92,11 @@ export const serviceService = {
       { new: true }
     );
 
-    return service
+    return service;
   },
-  // ===========
+  // DELETE SERVICE ================================================================
+  async deleteService(id) {
+    const service = await Service.findByIdAndUpdate(id, {is_deleted: true, deleted_at: new Date()}, {new: true})
+    return service;
+  },
 };
