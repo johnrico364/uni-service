@@ -23,7 +23,7 @@ export const serviceService = {
   },
   // GET ALL SERVICES =============================================================
   async getServices() {
-    const services = await Service.find().sort({ createdAt: -1 });
+    const services = await Service.find({is_deleted: false}).sort({ createdAt: -1 });
     return services;
   },
   // GET SERVICE BY ID ============================================================
