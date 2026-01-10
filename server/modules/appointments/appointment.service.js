@@ -3,17 +3,6 @@ import Appointment from "./appointment.model.js"; // Model
 export const appointmentService = {
   // CREATE APPOINTMENT ==========================================================
   async createAppointment(data) {
-    // Validate required fields
-    if (
-      !data.service_id ||
-      !data.user_id ||
-      !data.provider_id ||
-      !data.schedule ||
-      !data.payment_id
-    ) {
-      throw new Error("Missing required fields");
-    }
-
     // Validate MongoDB ObjectId format
     const objectIdRegex = /^[0-9a-fA-F]{24}$/;
     if (!objectIdRegex.test(data.service_id)) {
