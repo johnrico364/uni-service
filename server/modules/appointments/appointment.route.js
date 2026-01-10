@@ -1,10 +1,10 @@
 import express from "express";
-import { createAppointment } from "./appointment.controller.js";
+import { createAppointment, getAppointments } from "./appointment.controller.js";
 
 const router = express.Router();
 
 router.post("/", createAppointment);
-// router.get("/");
+router.get("/", getAppointments);
 // router.get("/:id");
 // router.patch("/:id");
 // router.patch("/:id/status");

@@ -12,3 +12,12 @@ export const createAppointment = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentService.getAppointments();
+    res.status(200).json({ success: true, data: appointments });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

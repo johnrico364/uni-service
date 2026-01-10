@@ -41,5 +41,9 @@ export const appointmentService = {
     const appointment = await Appointment.create(data);
     return appointment;
   },
-  // ====
+  // GET APPOINTMENTS ============================================================
+  async getAppointments() {
+    const appointments = Appointment.find({ is_deleted: false });
+    return appointments;
+  },
 };
