@@ -43,7 +43,16 @@ export const appointmentService = {
   },
   // GET APPOINTMENTS ============================================================
   async getAppointments() {
-    const appointments = Appointment.find({ is_deleted: false });
+    const appointments = await Appointment.find({ is_deleted: false });
     return appointments;
   },
+  // GET APPOINTMENT BY ID =======================================================
+  async getAppointmentId(id) {
+    const appointment = await Appointment.findById(id);
+    if (!appointment) {
+      throw new Error("No appointment found");
+    }
+    return appointment;
+  },
+  // ====
 };
