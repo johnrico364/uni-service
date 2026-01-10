@@ -54,5 +54,17 @@ export const appointmentService = {
     }
     return appointment;
   },
-  // ====
+  // UPDATE APPOINTMENT =========================================================
+  async updateAppointment(id, data) {
+    const isExisting = await Appointment.findById(id);
+    if (!isExisting) {
+      throw new Error("No appointment found");
+    }
+
+    const newAppointment = await Appointment.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    return newAppointment;
+  },
+  // ===
 };
