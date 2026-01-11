@@ -10,4 +10,13 @@ export const chatService = {
 
     return chat;
   },
+  // GET ALL CHATS ==================================================================
+  async getChats(user_id) {
+    const chats = await Chat.find({
+      $or: [{ user_id: user_id }, { partner_id: user_id }],
+    }).sort({ last_message_at: -1 });
+
+    return chats;
+  },
+  // =====
 };
