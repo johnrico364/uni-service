@@ -12,6 +12,8 @@ const appointmentSchema = new mongoose.Schema(
       default: "pending",
     },
     payment_id: { type: String, ref: "Payment" },
+    is_deleted: { type: Boolean, required: true, default: false },
+    deleted_at: { type: Date, default: null },
   },
   {
     timestamps: true,
