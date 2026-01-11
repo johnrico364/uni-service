@@ -14,6 +14,7 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
       : _authService = authService,
         super(BlocInitial()) {
     on<LoginRequested>(_onLoginRequested);
+    on<LoginWithGoogle>(_onLoginWithGoogle);
     on<RegisterRequested>(_onRegisterRequested);
     on<LogoutRequested>(_onLogoutRequested);
   }
@@ -40,6 +41,23 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
     emit(AuthLoading());
     try {
       final user = await _authService.register(event.email, event.password);
+      if (user != null) {
+        emit(AuthAuthenticated(uid: user.uid, email: user.email));
+      } else {
+        emit(AuthUnauthenticated());
+      }
+    } on fb.FirebaseAuthException catch (e) {
+      emit(AuthError(e.message ?? e.code));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  Future<void> _onLoginWithGoogle(
+      LoginWithGoogle event, Emitter<BlocState> emit) async {
+    emit(AuthLoading());
+    try {
+      final user = await _authService.signInWithGoogle();
       if (user != null) {
         emit(AuthAuthenticated(uid: user.uid, email: user.email));
       } else {

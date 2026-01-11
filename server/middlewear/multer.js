@@ -3,7 +3,6 @@ import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    console.log(file.mimetype, file.originalname);
     const img_type = req?.body?.image_type;
     callback(null, path.join("images/", img_type));
   },
