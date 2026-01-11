@@ -66,5 +66,21 @@ export const appointmentService = {
     });
     return newAppointment;
   },
-  // ===
+  // DELETE APPOINTMENT ==================================================
+  async deleteAppointment(id) {
+    const isExisting = await Appointment.findById(id);
+    if (!isExisting) {
+      throw new Error("No appointment found");
+    }
+
+    const appointment = await Appointment.findByIdAndUpdate(
+      id,
+      { is_deleted: true, deleted_at: new Date() },
+      {
+        new: true,
+      }
+    );
+
+    return appointment;
+  },
 };

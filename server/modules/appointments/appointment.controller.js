@@ -42,3 +42,13 @@ export const updateAppointment = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const deleteAppointment = async (req,res) => {
+  const id = req.params.id;
+  try {
+    const appointment = await appointmentService.deleteAppointment(id);
+    res.status(200).json({ success: true, data: appointment });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+}
