@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema(
   {
@@ -8,14 +8,16 @@ const serviceSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     duration_minutes: { type: Number, required: true },
     category: { type: String, required: true },
-    images: { type: String, required: true },
+    images: [{ type: String, required: true }],
     availability_start: { type: String, required: true },
     availability_end: { type: String, required: true },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
+    is_deleted: { type: Boolean, required: true, default: false },
+    deleted_at: { type: Date, default: null },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("Service", serviceSchema);
+export default mongoose.model("Service", serviceSchema);

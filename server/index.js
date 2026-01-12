@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import user from "./modules/users/user.route.js";
 import service from "./modules/services/service.route.js";
 import provider from "./modules/service_providers/service_provider.route.js";
+import appointments from "./modules/appointments/appointment.route.js";
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use("/images", express.static("images"));
 app.use("/api/users", user);
 app.use("/api/providers", provider);
 app.use("/api/services", service);
+app.use("/api/appointments", appointments);
 
 // Local Server
 app.listen(process.env.PORT, () =>

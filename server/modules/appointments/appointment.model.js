@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const appointmentSchema = new mongoose.Schema(
   {
@@ -12,10 +12,12 @@ const appointmentSchema = new mongoose.Schema(
       default: "pending",
     },
     payment_id: { type: String, ref: "Payment" },
+    is_deleted: { type: Boolean, required: true, default: false },
+    deleted_at: { type: Date, default: null },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("Appointment", appointmentSchema);
+export default mongoose.model("Appointment", appointmentSchema);
