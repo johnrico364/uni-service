@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   BlocBloc? _bloc;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -57,9 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state is AuthError) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
+              setState(() {
+                _errorMessage = state.message;
+              });
+            } else {
+              // Clear error message when state changes to non-error
+              if (_errorMessage != null) {
+                setState(() {
+                  _errorMessage = null;
+                });
+              }
             }
           },
           child: Container(
@@ -152,8 +160,55 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 30),
 
+                          // Error message above email field
+                          if (_errorMessage != null)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.redAccent,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.redAccent,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      _errorMessage!,
+                                      style: const TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
                           // Email field with floating label
                           TextFormField(
+                            onChanged: (value) {
+                              // Clear error when user starts typing
+                              if (_errorMessage != null) {
+                                setState(() {
+                                  _errorMessage = null;
+                                });
+                              }
+                            },
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.white),
