@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../features/pages/service/screen/service_screen.dart';
 import '../../features/pages/product/screen/product_screen.dart';
 import '../../features/pages/notification/screen/notification_screen.dart';
-import '../../features/pages/message/screen/message_screen.dart';
+import '../../features/pages/message/screen/message_screen_firestore.dart';
 import '../../features/pages/profile/screen/profile_screen.dart';
 
 class BottomNavigator extends StatefulWidget {
