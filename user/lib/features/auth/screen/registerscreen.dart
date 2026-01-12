@@ -22,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureConfirmPassword = true;
   bool _agreedToTerms = false;
   BlocBloc? _bloc;
+  String? _errorMessage;
 
   // Focus nodes to track input focus state
   final _emailFocus = FocusNode();
@@ -91,12 +92,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           }
 
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            setState(() {
+              _errorMessage = state.message;
+            });
+          } else {
+            // Clear error message when state changes to non-error
+            if (_errorMessage != null) {
+              setState(() {
+                _errorMessage = null;
+              });
+            }
           }
         },
         child: SafeArea(
@@ -141,6 +146,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     const SizedBox(height: 40),
 
+                    // Error message above email field
+                    if (_errorMessage != null)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.redAccent,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.redAccent,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                _errorMessage!,
+                                style: const TextStyle(
+                                  color: Colors.redAccent,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                     // Email Field
                     _buildInputField(
                       controller: _emailController,
@@ -148,6 +192,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       labelText: 'Email',
                       isFocused: _emailFocus.hasFocus,
                       keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        // Clear error when user starts typing
+                        if (_errorMessage != null) {
+                          setState(() {
+                            _errorMessage = null;
+                          });
+                        }
+                      },
                       validator: (v) {
                         if (v == null || v.isEmpty) {
                           return 'Enter email';
@@ -443,12 +495,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Widget? suffixIcon,
     TextInputType? keyboardType,
     String? Function(String?)? validator,
+    void Function(String)? onChanged,
   }) {
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      onChanged: onChanged,
       style: TextStyle(
         color: isFocused ? Colors.white : const Color(0xFF1a1a2e),
         fontSize: 16,
