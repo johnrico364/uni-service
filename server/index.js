@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 
+// Initialize Firebase Admin (must be imported before routes)
+import "./config/firebase-admin.js";
+
 // Import routes
 import user from "./modules/users/user.route.js";
 import service from "./modules/services/service.route.js";
