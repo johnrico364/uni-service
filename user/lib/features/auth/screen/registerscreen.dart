@@ -13,113 +13,38 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _googleEmailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _agreedToTerms = false;
+  BlocBloc? _bloc;
 
   // Focus nodes to track input focus state
-  final _usernameFocus = FocusNode();
+  final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
   final _confirmPasswordFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _usernameFocus.addListener(() => setState(() {}));
+    _emailFocus.addListener(() => setState(() {}));
     _passwordFocus.addListener(() => setState(() {}));
     _confirmPasswordFocus.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _usernameFocus.dispose();
+    _emailFocus.dispose();
     _passwordFocus.dispose();
     _confirmPasswordFocus.dispose();
     super.dispose();
-  }
-
-  void _showGoogleSignInModal(BuildContext context) {
-    _googleEmailController.clear();
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder:
-          (dialogContext) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            contentPadding: const EdgeInsets.all(24),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/splashscreen/google-logo.png',
-                  width: 48,
-                  height: 48,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Signing up using Google',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _googleEmailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email address',
-                    hintText: 'Enter your email',
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF6A74FF),
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext);
-                      context.read<BlocBloc>().add(LoginWithGoogle());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6A74FF),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
   }
 
   @override
@@ -143,22 +68,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
             );
           } else {
+            // Close loading dialog if open
             if (Navigator.canPop(context)) {
-              Navigator.popUntil(
-                context,
-                (route) => route.isFirst || route.settings.name != null,
-              );
+              Navigator.pop(context);
             }
           }
 
           if (state is AuthAuthenticated) {
+            // Close loading dialog if still open
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Registration successful'),
                 backgroundColor: Color(0xFF1a1a2e),
               ),
             );
-            Navigator.of(context).pop();
+            // Close register screen to go back to root
+            // StreamBuilder in main.dart will detect auth state change and show BottomNavigator
+            Navigator.of(context).popUntil((route) => route.isFirst);
           }
 
           if (state is AuthError) {
@@ -212,17 +141,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     const SizedBox(height: 40),
 
-                    // Username Field
+                    // Email Field
                     _buildInputField(
-                      controller: _usernameController,
-                      focusNode: _usernameFocus,
-                      labelText: 'Username',
-                      isFocused: _usernameFocus.hasFocus,
-                      validator:
-                          (v) =>
-                              (v == null || v.isEmpty)
-                                  ? 'Enter username'
-                                  : null,
+                      controller: _emailController,
+                      focusNode: _emailFocus,
+                      labelText: 'Email',
+                      isFocused: _emailFocus.hasFocus,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (v) {
+                        if (v == null || v.isEmpty) {
+                          return 'Enter email';
+                        }
+                        if (!v.contains('@') || !v.contains('.')) {
+                          return 'Enter a valid email';
+                        }
+                        return null;
+                      },
                     ),
 
                     const SizedBox(height: 16),
@@ -379,9 +313,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               );
                               return;
                             }
-                            BlocProvider.of<BlocBloc>(context).add(
+                            _bloc?.add(
                               RegisterRequested(
-                                email: _usernameController.text.trim(),
+                                email: _emailController.text.trim(),
                                 password: _passwordController.text.trim(),
                               ),
                             );
@@ -416,12 +350,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 20),
 
                     // Google Sign In Button
-                    // Google button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: () => _showGoogleSignInModal(context),
+                        onPressed: () {
+                          _bloc?.add(LoginWithGoogle());
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFE6E6E6),
                           foregroundColor: Colors.black87,
@@ -486,11 +421,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     // If a bloc instance was provided, reuse it; otherwise provide a local bloc.
     if (widget.bloc != null) {
+      _bloc = widget.bloc;
       return BlocProvider.value(value: widget.bloc!, child: content);
     }
 
     return BlocProvider(
-      create: (_) => BlocBloc(authService: AuthService()),
+      create: (_) {
+        _bloc = BlocBloc(authService: AuthService());
+        return _bloc!;
+      },
       child: content,
     );
   }
@@ -502,12 +441,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required bool isFocused,
     bool obscureText = false,
     Widget? suffixIcon,
+    TextInputType? keyboardType,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
       obscureText: obscureText,
+      keyboardType: keyboardType,
       style: TextStyle(
         color: isFocused ? Colors.white : const Color(0xFF1a1a2e),
         fontSize: 16,
