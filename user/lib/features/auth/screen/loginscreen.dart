@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/bloc_bloc.dart';
 import '../auth_service.dart';
 import 'registerscreen.dart';
-import '../../pages/service/screen/service_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,97 +15,25 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _googleEmailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  BlocBloc? _bloc;
+  String? _errorMessage;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _googleEmailController.dispose();
     super.dispose();
-  }
-
-  void _showGoogleSignInModal(BuildContext context) {
-    _googleEmailController.clear();
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder:
-          (dialogContext) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            contentPadding: const EdgeInsets.all(24),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/splashscreen/google-logo.png',
-                  width: 48,
-                  height: 48,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Signing up using Google',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _googleEmailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email address',
-                    hintText: 'Enter your email',
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF6A74FF),
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext);
-                      context.read<BlocBloc>().add(LoginWithGoogle());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6A74FF),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BlocBloc(authService: AuthService()),
+      create: (_) {
+        _bloc = BlocBloc(authService: AuthService());
+        return _bloc!;
+      },
       child: Scaffold(
         backgroundColor: const Color(0xFF6A74FF),
         body: BlocListener<BlocBloc, BlocState>(
@@ -119,20 +46,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     (_) => const Center(child: CircularProgressIndicator()),
               );
             } else {
+              // Close loading dialog if open
               if (Navigator.canPop(context)) Navigator.pop(context);
             }
 
             if (state is AuthAuthenticated) {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const ServiceScreen()),
-                (_) => false,
-              );
+              // Close any open dialogs
+              if (Navigator.canPop(context)) Navigator.pop(context);
+              // Navigation is handled by StreamBuilder in main.dart
+              // Firebase auth state change will automatically trigger rebuild
             }
 
             if (state is AuthError) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
+              setState(() {
+                _errorMessage = state.message;
+              });
+            } else {
+              // Clear error message when state changes to non-error
+              if (_errorMessage != null) {
+                setState(() {
+                  _errorMessage = null;
+                });
+              }
             }
           },
           child: Container(
@@ -225,14 +160,61 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 30),
 
-                          // Username field with floating label
+                          // Error message above email field
+                          if (_errorMessage != null)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.redAccent,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.redAccent,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      _errorMessage!,
+                                      style: const TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          // Email field with floating label
                           TextFormField(
+                            onChanged: (value) {
+                              // Clear error when user starts typing
+                              if (_errorMessage != null) {
+                                setState(() {
+                                  _errorMessage = null;
+                                });
+                              }
+                            },
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.white),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
-                              labelText: 'Username',
+                              labelText: 'Email',
                               labelStyle: TextStyle(
                                 color: Colors.black.withOpacity(0.6),
                               ),
@@ -241,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                               prefixIcon: Icon(
-                                Icons.person_outline,
+                                Icons.email_outlined,
                                 color: Colors.black.withOpacity(0.6),
                               ),
                               filled: true,
@@ -275,11 +257,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            validator:
-                                (v) =>
-                                    v == null || v.isEmpty
-                                        ? 'Enter username'
-                                        : null,
+                            validator: (v) {
+                              if (v == null || v.isEmpty) {
+                                return 'Enter email';
+                              }
+                              if (!v.contains('@') || !v.contains('.')) {
+                                return 'Enter a valid email';
+                              }
+                              return null;
+                            },
                           ),
 
                           const SizedBox(height: 16),
@@ -381,7 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  context.read<BlocBloc>().add(
+                                  _bloc?.add(
                                     LoginRequested(
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
@@ -444,7 +430,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: () => _showGoogleSignInModal(context),
+                              onPressed: () {
+                                _bloc?.add(LoginWithGoogle());
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFE6E6E6),
                                 foregroundColor: Colors.black87,

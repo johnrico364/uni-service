@@ -30,9 +30,9 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
         emit(AuthUnauthenticated());
       }
     } on fb.FirebaseAuthException catch (e) {
-      emit(AuthError(e.message ?? e.code));
+      emit(AuthError(_getErrorMessage(e)));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('An unexpected error occurred. Please try again.'));
     }
   }
 
@@ -47,9 +47,9 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
         emit(AuthUnauthenticated());
       }
     } on fb.FirebaseAuthException catch (e) {
-      emit(AuthError(e.message ?? e.code));
+      emit(AuthError(_getErrorMessage(e)));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('An unexpected error occurred. Please try again.'));
     }
   }
 
@@ -64,9 +64,9 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
         emit(AuthUnauthenticated());
       }
     } on fb.FirebaseAuthException catch (e) {
-      emit(AuthError(e.message ?? e.code));
+      emit(AuthError(_getErrorMessage(e)));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('An unexpected error occurred. Please try again.'));
     }
   }
 
@@ -75,5 +75,30 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
     emit(AuthLoading());
     await _authService.signOut();
     emit(AuthUnauthenticated());
+  }
+
+  String _getErrorMessage(fb.FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No account found with this email address.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'invalid-email':
+        return 'The email address is invalid.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'email-already-in-use':
+        return 'An account already exists with this email address.';
+      case 'weak-password':
+        return 'The password is too weak. Please use a stronger password.';
+      case 'invalid-credential':
+        return 'Invalid email or password. Please check your credentials.';
+      case 'too-many-requests':
+        return 'Too many failed attempts. Please try again later.';
+      case 'network-request-failed':
+        return 'Network error. Please check your internet connection.';
+      default:
+        return e.message ?? 'An error occurred: ${e.code}';
+    }
   }
 }
